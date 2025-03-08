@@ -1,0 +1,58 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+
+Times = []
+Outputs = []
+Inputs = []
+
+with open('RFR9.txt') as f:
+    for line in f:
+        line = line.split()
+        Times.append(float(line[0]))
+        Inputs.append(float(line[1]))
+
+#fixing R1 value
+R1 = 10
+
+#fixing the potentiometer values
+lower = float(input("Lower threshold: "))
+upper = float(input("Upper threshold: "))
+
+#creating the Schmitt trigger
+Vlt = (lower / 15) * 12
+Vut = (upper / 15) * 12
+VL = 0
+VH = 12
+
+# Important formulae
+R2 = R1 / ((Vlt - Vut) / (VL - VH))
+Vref = (Vut + VL * (R1 / R2)) * (R2 / (R1 + R2))
+
+print("Vref = ", Vref)
+print("R2 = ", R2)
+
+flag = 1 if Inputs[0] > Vut else 0
+
+#process all input values
+for i in Inputs[1:]:
+    if flag == 0 and i > Vut:
+        flag = 1
+    elif flag == 1 and i < Vlt:
+        flag = 0
+    Vout = flag * VH
+    Outputs.append(Vout)
+
+#first value adding
+Outputs.insert(0, Outputs[0])  
+
+#full plot
+plt.figure()
+plt.plot(Times, Outputs, label="Vout", color="blue")
+plt.plot(Times, Inputs, label="Vin", color="red")
+plt.xlabel('Time')
+plt.ylabel('Voltages')
+plt.legend()
+plt.savefig('RFR9.png')
+plt.close()
