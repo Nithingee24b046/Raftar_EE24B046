@@ -1,0 +1,34 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+
+t = np.arange(0.0, 1, 0.01)
+theta = t*2*math.pi
+a = np.sin(theta)
+b = np.sin(theta - (2*math.pi/3))
+c = np.sin(theta - (4*math.pi/3))
+
+# Clarke Transformation: Convert (Ia, Ib, Ic) -> (alpha, beta)
+alpha = (2/3) * (a - (0.5 * (b + c)))
+beta = (2/3) * ((math.sqrt(3)/2) * (b - c))
+
+# Park Transformation: Convert (alpha, beta) -> (Id, Iq)
+Id = 0
+Iq = 0
+Id = (beta * np.sin(theta))
+Ir = (alpha * np.cos(theta))
+Ib = Id + Ir
+Iq = (-alpha * np.sin(theta))+ (beta * np.cos(theta))
+
+plt.close()
+plt.figure()
+plt.plot(t,Ib)
+plt.savefig('Id.png')
+plt.close()
+
+plt.figure()
+plt.plot(t,Iq)
+plt.savefig('Iq.png')
+plt.close()
