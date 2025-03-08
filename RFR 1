@@ -1,0 +1,30 @@
+import csv
+
+#Create blank lists
+Speed =[]
+Time = []
+Acceleration = []
+E = 0
+
+#Parameters given
+
+RollRes = 0.125
+DragCoeff = 0.916
+FrontalArea = 1.2
+Density = 1.2
+Gravity = 9.81
+Mass = 330
+
+#CSV handling
+with open('Endurance.csv', 'r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        Speed.append(float(row[0]))
+        Time.append(float(row[1]))
+        Acceleration.append(float(row[2]))
+
+#Energy Calculations
+for i in range(0,len(Speed)-1):
+    E = abs((((1/2)*(Density)*((Speed[i])**2)*(5/18)*(5/18)*(FrontalArea)*(DragCoeff) + RollRes*Gravity*Mass + Mass*Acceleration[i])*Speed[i]*(5/18))*(Time[i + 1] - Time[i])) + E
+
+print(E)
