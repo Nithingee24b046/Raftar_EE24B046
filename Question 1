@@ -5,6 +5,7 @@ Speed =[]
 Time = []
 Acceleration = []
 E = 0
+P = 0
 
 #Parameters given
 
@@ -27,4 +28,10 @@ with open('Endurance.csv', 'r') as file:
 for i in range(0,len(Speed)-1):
     E = abs((((1/2)*(Density)*((Speed[i])**2)*(5/18)*(5/18)*(FrontalArea)*(DragCoeff) + RollRes*Gravity*Mass + Mass*Acceleration[i])*Speed[i]*(5/18))*(Time[i + 1] - Time[i])) + E
 
+#Going through peak power
+for i in range(0,len(Speed)-1):
+    if abs(((1/2)*(Density)*((Speed[i])**2)*(5/18)*(5/18)*(FrontalArea)*(DragCoeff) + RollRes*Gravity*Mass + Mass*Acceleration[i])*Speed[i]*(5/18)) > P:
+        P = abs((((1/2)*(Density)*((Speed[i])**2)*(5/18)*(5/18)*(FrontalArea)*(DragCoeff) + RollRes*Gravity*Mass + Mass*Acceleration[i])*Speed[i]*(5/18)))
+
 print(E)
+print(P)
